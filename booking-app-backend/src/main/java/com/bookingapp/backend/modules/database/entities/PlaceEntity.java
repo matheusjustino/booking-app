@@ -27,7 +27,8 @@ public class PlaceEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
     private UserEntity owner;
 
     @Column(nullable = false)
