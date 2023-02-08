@@ -46,6 +46,8 @@ public class BookService {
 
         BookEntity bookEntity = new BookEntity();
         BeanUtils.copyProperties(data, bookEntity, CopyPropertiesWithoutNull.getNullPropertyNames(data));
+        bookEntity.setUser(userEntity.get());
+        bookEntity.setPlace(placeEntity.get());
         this.bookRepository.save(bookEntity);
 
         return this.buildBookResponse(bookEntity);
@@ -58,7 +60,7 @@ public class BookService {
 
     public List<BookDTO> findAllBooksByOwner(UUID ownerId) {
         this.logger.info("BookService:findAllBooksByOwner");
-        return this.bookRepository.findBookByOwnerId(ownerId).stream().map(this::buildBookResponse).toList();
+        return this.bookRepository.findBookByUserId(ownerId).stream().map(this::buildBookResponse).toList();
     }
 
     public BookDTO findBookById(UUID bookId) {

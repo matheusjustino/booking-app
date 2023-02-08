@@ -13,9 +13,9 @@ import java.util.UUID;
 
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, UUID> {
-    @Query("SELECT b FROM BookEntity b WHERE b.owner.id = :ownerId")
-    List<BookEntity> findBookByOwnerId(@Param("ownerId") UUID ownerId);
+    @Query("SELECT b FROM BookEntity b WHERE b.user.id = :userId")
+    List<BookEntity> findBookByUserId(@Param("userId") UUID userId);
 
-    @Query("SELECT b FROM BookEntity b WHERE b.id = :bookId AND b.owner.id = :ownerId")
-    Optional<PlaceEntity> findBookByBookIdAndOwnerId(@Param("bookId") UUID bookId, @Param("ownerId") UUID ownerId);
+    @Query("SELECT b FROM BookEntity b WHERE b.id = :bookId AND b.user.id = :userId")
+    Optional<PlaceEntity> findBookByBookIdAndUserId(@Param("bookId") UUID bookId, @Param("userId") UUID userId);
 }

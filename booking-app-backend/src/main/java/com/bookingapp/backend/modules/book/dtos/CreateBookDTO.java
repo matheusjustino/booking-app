@@ -1,6 +1,7 @@
 package com.bookingapp.backend.modules.book.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -15,11 +16,9 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 public class CreateBookDTO {
-    @NotBlank
+    @NotNull
     private UUID placeId;
-    @NotBlank
     private Date checkIn = new Date();
-    @NotBlank
     private Date checkOut = new Date();
     @NotBlank
     private String name = "";

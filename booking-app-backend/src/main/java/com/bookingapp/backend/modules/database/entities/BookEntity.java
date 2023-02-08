@@ -26,7 +26,7 @@ public class BookEntity implements Serializable {
     private UUID id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @ManyToOne(cascade = CascadeType.ALL)
