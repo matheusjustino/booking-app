@@ -25,10 +25,12 @@ public class BookEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "owner_id")
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "place_id")
     private PlaceEntity place;
 
     @Column(nullable = false)
@@ -43,6 +45,6 @@ public class BookEntity implements Serializable {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false)
-    private Integer price;
+    @Column(precision = 2)
+    private Double price;
 }

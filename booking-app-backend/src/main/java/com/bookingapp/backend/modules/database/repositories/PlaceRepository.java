@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface PlaceRepository extends JpaRepository<PlaceEntity, UUID> {
     @Query("SELECT p FROM PlaceEntity p WHERE p.owner.id = :ownerId")
     List<PlaceEntity> findPlacesByOwnerId(@Param("ownerId") UUID ownerId);
+
     @Query("SELECT p FROM PlaceEntity p WHERE p.id = :placeId AND p.owner.id = :ownerId")
     Optional<PlaceEntity> findPlaceByPlaceIdAndOwnerId(@Param("placeId") UUID placeId, @Param("ownerId") UUID ownerId);
 }

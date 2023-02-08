@@ -11,7 +11,6 @@ import com.bookingapp.backend.modules.place.dtos.PlaceDTO;
 import com.bookingapp.backend.modules.place.dtos.UpdatePlaceDTO;
 import com.bookingapp.backend.modules.user.dtos.UserDTO;
 import com.bookingapp.backend.utils.CopyPropertiesWithoutNull;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ public class PlaceService {
     private final Logger logger = LoggerFactory.getLogger(PlaceService.class);
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
-    private final EntityManager entityManager;
 
     public PlaceDTO createPlace(UUID userId, CreatePlaceDTO data) {
         this.logger.info("PlaceService:createPlace");
@@ -65,7 +63,7 @@ public class PlaceService {
         }
 
         BeanUtils.copyProperties(data, place.get(), CopyPropertiesWithoutNull.getNullPropertyNames(data));
-        return this.buildPlaceResponse(place.get(), place.get().getOwner());
+        return this.buildPlaceResponse(place.get());
     }
 
     private PlaceDTO buildPlaceResponse(PlaceEntity placeEntity) {
