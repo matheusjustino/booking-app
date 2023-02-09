@@ -1,11 +1,13 @@
 package com.bookingapp.backend.modules.user;
 
+import com.bookingapp.backend.modules.database.entities.UserEntity;
 import com.bookingapp.backend.modules.user.dtos.UpdateUserDTO;
 import com.bookingapp.backend.modules.user.dtos.UserDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,12 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.findAll());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getOne() {
+        UUID userId = ((UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.getOne(userId));
     }
 
     @GetMapping("/{id}")

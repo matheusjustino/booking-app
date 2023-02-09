@@ -46,7 +46,11 @@ public class JWTService {
      * @return retorna o token de autenticação
      */
     public String generateToken(UserEntity userDetails) {
-        return this.generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("email", userDetails.getEmail());
+        extraClaims.put("username", userDetails.getUsername());
+        extraClaims.put("id", userDetails.getId().toString());
+        return this.generateToken(extraClaims, userDetails);
     }
 
     /**

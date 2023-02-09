@@ -22,6 +22,11 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
+    public UserDTO me(UUID userId) {
+        this.logger.info("UserService:me");
+        return this.getOne(userId);
+    }
+
     public List<UserDTO> findAll() {
         this.logger.info("UserService:findAll");
         return this.userRepository.findAll().stream().map(this::convertToUserDTO).toList();
