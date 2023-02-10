@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
 	const { user } = useAuth();
 
 	return (
-		<nav className="flex items-center justify-between w-full min-h-[50px]">
+		<nav className="flex flex-col items-center justify-between w-full min-h-[50px] md:flex-row gap-4">
 			<Link href="/" className="flex items-center gap-1">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

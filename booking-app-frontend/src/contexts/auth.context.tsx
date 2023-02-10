@@ -48,7 +48,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 			setReady(false);
 			(async () => {
 				try {
-					const { data } = await api.get<UserInterface>(`/users/me`);
+					//const { data } = await api.get<UserInterface>(`/users/me`);
+					const data: UserInterface = {
+						id: '1',
+						username: 'Teste',
+						email: 'teste@teste.com',
+					};
 					setUser(data);
 				} catch (error) {
 					console.error(error);
@@ -62,19 +67,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 	const doLogin = async (credentials: DoLoginInterface) => {
 		try {
-			const { data } = await api.post<{ token: string }>(
-				`/auth/login`,
-				credentials,
-			);
-
+			// const { data } = await api.post<{ token: string }>(
+			// 	`/auth/login`,
+			// 	credentials,
+			// );
+			const data = {
+				token: 'token',
+			};
 			setCookie(undefined, '@auth.token', data.token, {
 				maxAge: 60 * 60 * 12, // 12h
 				path: '/', // Quais caminhos terão acesso ao token. `/` significa que todos terão acesso
 			});
 
-			const { id, username, email } = jwtDecode<UserInterface>(
-				data.token,
-			);
+			// const { id, username, email } = jwtDecode<UserInterface>(
+			// 	data.token,
+			// );
+			const { id, username, email } = {
+				id: '1',
+				username: 'Teste',
+				email: 'teste@teste.com',
+			};
 			setUser({ id, username, email });
 
 			api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
