@@ -1,7 +1,7 @@
 import { ChangeEvent, useReducer } from 'react';
 
 interface HandleForm {
-	(event: ChangeEvent<HTMLInputElement>): void;
+	(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void;
 }
 
 interface ResetForm {

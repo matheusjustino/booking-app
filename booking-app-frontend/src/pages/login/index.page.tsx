@@ -32,10 +32,10 @@ export default function Home() {
 			setIsLoading(true);
 			await doLogin(loginForm);
 			notify('Login successfully');
-		} catch (error: unknown) {
+		} catch (error: any) {
 			console.error(error);
 			const errMsg = error?.response?.data?.error || error.message || '';
-			notify(errMsg, { type: 'error ' });
+			notify(errMsg, { type: 'error' });
 		} finally {
 			setIsLoading(false);
 		}

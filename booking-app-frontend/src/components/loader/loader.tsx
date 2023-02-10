@@ -7,7 +7,7 @@ const Loader: React.FC<LoaderProps> = ({ size }) => {
 		<div role="status">
 			<svg
 				className={`mr-2 text-gray-200 animate-spin fill-blue-600 ${
-					size ? `w-${size}` : "w-8"
+					size ? `w-${size}` : 'w-8'
 				}`}
 				viewBox="0 0 100 101"
 				fill="none"
