@@ -1,11 +1,15 @@
-package com.bookingapp.backend.modules.auth;
+package com.bookingapp.backend.modules.auth.jwt;
 
+import com.bookingapp.backend.config.EnvsConfig;
+import com.bookingapp.backend.modules.auth.interfaces.JWTServiceInterface;
 import com.bookingapp.backend.modules.database.entities.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +20,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 @Service
-public class JWTService {
-    public int TOKEN_EXPIRATION; // 600_000 * 6 * 12; // 12h
-    public String SECRET;
-
-    public JWTService(Environment environment) {
-        this.TOKEN_EXPIRATION = Integer.parseInt(Objects.requireNonNull(environment.getProperty("TOKEN_EXPIRATION")));
-        this.SECRET = environment.getProperty("SECRET");
-    }
+public class JWTService implements JWTServiceInterface {
 
     /**
      * Método que extrai o email de usuário do token
@@ -65,7 +63,7 @@ public class JWTService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + this.TOKEN_EXPIRATION))
+                .setExpiration(new Date(System.currentTimeMillis() + Integer.parseInt(EnvsConfig.getEnv("TOKEN_EXPIRATION"))))
                 .signWith(this.getSignKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -113,7 +111,7 @@ public class JWTService {
      * @return retorna uma secret key
      */
     private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(this.SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(EnvsConfig.getEnv("SECRET"));
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

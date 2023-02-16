@@ -1,7 +1,6 @@
 package com.bookingapp.backend.modules.auth.jwt;
 
 import com.bookingapp.backend.exceptions.exceptions.ForbiddenException;
-import com.bookingapp.backend.modules.auth.JWTService;
 import com.bookingapp.backend.modules.database.entities.UserEntity;
 import com.bookingapp.backend.modules.database.repositories.UserRepository;
 import jakarta.servlet.FilterChain;

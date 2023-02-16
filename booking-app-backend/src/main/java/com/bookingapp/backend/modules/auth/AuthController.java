@@ -4,7 +4,6 @@ import com.bookingapp.backend.modules.auth.dtos.DoLoginDTO;
 import com.bookingapp.backend.modules.auth.dtos.LoginResponse;
 import com.bookingapp.backend.modules.auth.dtos.RegisterDTO;
 import com.bookingapp.backend.modules.user.dtos.UserDTO;
-import com.bookingapp.backend.modules.auth.jwt.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

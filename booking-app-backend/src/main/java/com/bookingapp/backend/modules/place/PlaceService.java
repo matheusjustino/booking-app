@@ -8,29 +8,32 @@ import com.bookingapp.backend.modules.database.repositories.PlaceRepository;
 import com.bookingapp.backend.modules.database.repositories.UserRepository;
 import com.bookingapp.backend.modules.place.dtos.CreatePlaceDTO;
 import com.bookingapp.backend.modules.place.dtos.PlaceDTO;
-import com.bookingapp.backend.modules.place.dtos.UpdatePlaceDTO;
+import com.bookingapp.backend.modules.place.interfaces.PlaceServiceInterface;
+import com.bookingapp.backend.modules.storage.StorageService;
 import com.bookingapp.backend.modules.user.dtos.UserDTO;
 import com.bookingapp.backend.utils.CopyPropertiesWithoutNull;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.io.InputStream;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service
-public class PlaceService {
+public class PlaceService implements PlaceServiceInterface {
     private final Logger logger = LoggerFactory.getLogger(PlaceService.class);
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
+    private final StorageService storageService;
 
-    public PlaceDTO createPlace(UUID userId, CreatePlaceDTO data) {
-        this.logger.info("PlaceService:createPlace");
-
+    @Transactional
+    public void createPlace(UUID userId, CreatePlaceDTO data, List<MultipartFile> files) {
         Optional<UserEntity> user = this.userRepository.findById(userId);
         if (user.isEmpty()) {
             throw new ResourceNotFoundException("User not found");
@@ -39,9 +42,23 @@ public class PlaceService {
         PlaceEntity newPlace = new PlaceEntity();
         BeanUtils.copyProperties(data, newPlace, CopyPropertiesWithoutNull.getNullPropertyNames(data));
         newPlace.setOwner(user.get());
-        this.placeRepository.save(newPlace);
+        List<String> photos = new ArrayList<>();
 
-        return this.buildPlaceResponse(newPlace, user.get());
+        for (MultipartFile file : files) {
+            try {
+                String originalFilename = file.getOriginalFilename();
+                String[] splitFilename = originalFilename.split(Pattern.quote("."));
+                String filename = splitFilename[0] + "-" + new Date().getTime() + "." + splitFilename[1];
+                this.storageService.saveFile(userId, filename, file);
+                photos.add(filename);
+            } catch (Exception e) {
+                this.logger.error(e.getMessage(), e.getCause());
+                throw new BadRequestException("Couldn't save image");
+            }
+        }
+
+        newPlace.setPhotos(photos);
+        this.placeRepository.save(newPlace);
     }
 
     public List<PlaceDTO> findAllPlaces() {
@@ -49,21 +66,25 @@ public class PlaceService {
         return this.placeRepository.findAll().stream().map(this::buildPlaceResponse).toList();
     }
 
-    public List<PlaceDTO> findAllPlacesByOwner(UUID ownerId) {
-        this.logger.info("PlaceService:findAllPlacesByOwner");
-        return this.placeRepository.findPlacesByOwnerId(ownerId).stream().map(this::buildPlaceResponse).toList();
-    }
+    public PlaceDTO findById(UUID placeId) {
+        this.logger.info("PlaceService:findById");
 
-    public PlaceDTO updatePlace(UUID placeId, UUID userId, UpdatePlaceDTO data) {
-        this.logger.info("PlaceService:updatePlace");
-
-        Optional<PlaceEntity> place = this.placeRepository.findPlaceByPlaceIdAndOwnerId(placeId, userId);
-        if (place.isEmpty()) {
+        Optional<PlaceEntity> placeEntity = this.placeRepository.findById(placeId);
+        if (placeEntity.isEmpty()) {
             throw new BadRequestException("Place not found");
         }
 
-        BeanUtils.copyProperties(data, place.get(), CopyPropertiesWithoutNull.getNullPropertyNames(data));
-        return this.buildPlaceResponse(place.get());
+        return this.buildPlaceResponse(placeEntity.get());
+    }
+
+    public InputStream getFileImage(String filename) {
+        this.logger.info("PlaceService:getFileImage");
+        return this.storageService.loadAsResource(filename);
+    }
+
+    public List<PlaceDTO> findPlacesByOwnerId(UUID ownerId) {
+        this.logger.info("PlaceService:findPlacesByOwnerId");
+        return this.placeRepository.findPlacesByOwnerId(ownerId).stream().map(this::buildPlaceResponse).toList();
     }
 
     private PlaceDTO buildPlaceResponse(PlaceEntity placeEntity) {

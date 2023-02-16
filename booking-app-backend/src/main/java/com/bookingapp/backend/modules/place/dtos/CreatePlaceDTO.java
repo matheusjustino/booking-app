@@ -22,7 +22,6 @@ public class CreatePlaceDTO {
     private String address = "";
     private String description = "";
     private List<String> perks = new ArrayList<>();
-    private List<String> photos = new ArrayList<>();
     private String extraInfo = "";
     private Integer checkIn = 0;
     private Integer checkOut = 0;
@@ -34,11 +33,11 @@ public class CreatePlaceDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CreatePlaceDTO that)) return false;
-        return getTitle().equals(that.getTitle()) && getAddress().equals(that.getAddress()) && Objects.equals(getPerks(), that.getPerks()) && Objects.equals(getExtraInfo(), that.getExtraInfo()) && Objects.equals(getCheckIn(), that.getCheckIn()) && Objects.equals(getCheckOut(), that.getCheckOut()) && Objects.equals(getMaxGuests(), that.getMaxGuests()) && getPrice().equals(that.getPrice());
+        return getTitle().equals(that.getTitle()) && getAddress().equals(that.getAddress()) && getDescription().equals(that.getDescription()) && getPerks().equals(that.getPerks()) && getExtraInfo().equals(that.getExtraInfo()) && getCheckIn().equals(that.getCheckIn()) && getCheckOut().equals(that.getCheckOut()) && getMaxGuests().equals(that.getMaxGuests()) && getPrice().equals(that.getPrice());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getAddress(), getPerks(), getExtraInfo(), getCheckIn(), getCheckOut(), getMaxGuests(), getPrice());
+        return Objects.hash(getTitle(), getAddress(), getDescription(), getPerks(), getExtraInfo(), getCheckIn(), getCheckOut(), getMaxGuests(), getPrice());
     }
 }

@@ -1,11 +1,12 @@
-package com.bookingapp.backend.modules.auth.jwt;
+package com.bookingapp.backend.modules.auth;
 
 import com.bookingapp.backend.exceptions.exceptions.BadRequestException;
 import com.bookingapp.backend.exceptions.exceptions.UnauthorizedException;
-import com.bookingapp.backend.modules.auth.JWTService;
 import com.bookingapp.backend.modules.auth.dtos.DoLoginDTO;
 import com.bookingapp.backend.modules.auth.dtos.LoginResponse;
 import com.bookingapp.backend.modules.auth.dtos.RegisterDTO;
+import com.bookingapp.backend.modules.auth.interfaces.AuthServiceInterface;
+import com.bookingapp.backend.modules.auth.jwt.JWTService;
 import com.bookingapp.backend.modules.user.dtos.UserDTO;
 import com.bookingapp.backend.modules.database.entities.UserEntity;
 import com.bookingapp.backend.modules.database.repositories.UserRepository;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class AuthService {
+public class AuthService implements AuthServiceInterface {
     private final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final UserRepository userRepository;
@@ -62,13 +63,11 @@ public class AuthService {
         this.logger.info("AuthService:doLogin");
 
         Optional<UserEntity> user = this.userRepository.findByEmail(data.getEmail());
-
         if (user.isEmpty()) {
             throw new UnauthorizedException("Invalid credentials");
         }
 
         boolean validPassword = this.passwordEncoder.matches(data.getPassword(), user.get().getPassword());
-
         if (!validPassword) {
             throw new UnauthorizedException("Invalid credentials");
         }

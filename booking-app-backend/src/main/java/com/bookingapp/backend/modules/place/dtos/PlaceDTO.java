@@ -1,5 +1,6 @@
 package com.bookingapp.backend.modules.place.dtos;
 
+import com.bookingapp.backend.modules.database.entities.ImageEntity;
 import com.bookingapp.backend.modules.user.dtos.UserDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,9 @@ public class PlaceDTO {
     private UserDTO owner;
     private String title;
     private String address;
-    private List<String> photos;
     private String description;
     private List<String> perks;
+    private List<String> photos;
     private String extraInfo;
     private Integer checkIn;
     private Integer checkOut;

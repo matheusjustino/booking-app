@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: booking-app-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_PASSWORD: "docker"
+      DB_URL=jdbc: "jdbc:postgresql://postgres:5432/javadb?createDatabaseIfNotExist=true&useSSL=false"
+      DB_USERNAME: "postgres"
+      PORT: 8080
+      SECRET: "DaFcJfMhPmSpUrXuZw3z6B8EbGdJgNjQmTqVsXv2x4A7C9EcHeKgPkRnUrWtYw3y5A8DaFcJfMhQmSpUsXuZw4z6B8EbGdKgNjQn"
+      TOKEN_EXPIRATION: 43200000
+      UPLOAD_DIR: "src/main/resources/uploads/images"
+      FRONTEND_URLS: "http://localhost:3000"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./logs:/app/logs"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - default_services_network
+
+  postgres:
+    image: postgres:14.4-alpine
+    container_name: booking-app-db
+    # restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "docker"
+      POSTGRES_DATABASE: "javadb"
+    ports:
+      - "5432:5432"
+    networks:
+      - default_services_network
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U postgres' ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  default_services_network:
+    name: booking-app-services

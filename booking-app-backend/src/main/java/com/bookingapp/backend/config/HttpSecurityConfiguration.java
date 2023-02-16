@@ -1,6 +1,5 @@
 package com.bookingapp.backend.config;
 
-;
 import com.bookingapp.backend.modules.auth.jwt.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class HttpSecurityConfiguration {
+public class HttpSecurityConfiguration implements WebMvcConfigurer {
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
@@ -28,7 +28,7 @@ public class HttpSecurityConfiguration {
             .csrf().disable()
             .authorizeHttpRequests()
             .requestMatchers("/auth/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/places").permitAll()
+            .requestMatchers(HttpMethod.GET, "/places/**").permitAll()
             .anyRequest()
             .authenticated()
             .and()

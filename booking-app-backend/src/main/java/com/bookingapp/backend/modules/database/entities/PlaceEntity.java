@@ -5,11 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Type;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "places")
 public class PlaceEntity implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -37,25 +36,28 @@ public class PlaceEntity implements Serializable {
     @Column(nullable = false)
     private String address;
 
-    @Column()
+    /*@OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<PlaceImageEntity> placeImages;*/
+    @Column
     private List<String> photos;
 
     @Column(nullable = false)
     private String description;
 
-    @Column(columnDefinition = "text[]")
+    @Column()
     private List<String> perks;
 
     @Column()
     private String extraInfo;
 
-    @Column(columnDefinition = "default 0")
+    @Column()
     private Integer checkIn;
 
-    @Column(columnDefinition = "default 0")
+    @Column()
     private Integer checkOut;
 
-    @Column(columnDefinition = "default 10")
+    @Column()
     private Integer maxGuests;
 
     @Column(nullable = false, precision = 2)
