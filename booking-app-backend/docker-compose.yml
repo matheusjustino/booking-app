@@ -14,7 +14,7 @@ services:
       SECRET: "DaFcJfMhPmSpUrXuZw3z6B8EbGdJgNjQmTqVsXv2x4A7C9EcHeKgPkRnUrWtYw3y5A8DaFcJfMhQmSpUsXuZw4z6B8EbGdKgNjQn"
       TOKEN_EXPIRATION: 43200000
       UPLOAD_DIR: "src/main/resources/uploads/images"
-      FRONTEND_URLS: "http://localhost:3000"
+      FRONTEND_URLS: "http://localhost:3000;https://booking-app-matheusjustino.vercel.app"
     ports:
       - "8080:8080"
     volumes:
@@ -37,6 +37,8 @@ services:
       - "5432:5432"
     networks:
       - default_services_network
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U postgres' ]
       interval: 5s

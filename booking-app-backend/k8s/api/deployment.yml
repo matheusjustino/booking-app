@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-app-backend-deployment
+  labels:
+    app: booking-app-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booking-app-backend
+  template:
+    metadata:
+      labels:
+        app: booking-app-backend
+    spec:
+      containers:
+        - name: booking-app-backend
+          image: matheusjustino/booking-app-backend
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: DB_PASSWORD
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: DB_URL
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: DB_NAME
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: DB_USERNAME
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: PORT
+            - name: SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: SECRET
+            - name: TOKEN_EXPIRATION
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: TOKEN_EXPIRATION
+            - name: UPLOAD_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: UPLOAD_DIR
+            - name: FRONTEND_URLS
+              valueFrom:
+                configMapKeyRef:
+                  name: bookings-app-backend-envs
+                  key: FRONTEND_URLS

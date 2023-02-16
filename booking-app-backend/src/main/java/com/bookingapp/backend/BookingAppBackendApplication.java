@@ -1,5 +1,6 @@
 package com.bookingapp.backend;
 
+import com.bookingapp.backend.config.EnvsConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
