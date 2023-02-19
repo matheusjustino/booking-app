@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +17,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 
 @RequiredArgsConstructor
 @Service
@@ -22,16 +26,36 @@ public class StorageService {
     private final Logger logger = LoggerFactory.getLogger(StorageService.class);
 
     public void saveFile(UUID userId, String filename, MultipartFile file) {
-        this.logger.info("StorageService:saveFile");
+        this.logger.info("StorageService:saveFileAsync");
 
-        try (InputStream inputStream = file.getInputStream()) {
-            Path uploadDirectory = Files.createDirectories(Paths.get(EnvsConfig.getEnv("UPLOAD_DIR") + "/" + userId));
-            Path filePath = uploadDirectory.resolve(filename);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (Exception exception) {
-            this.logger.error(exception.getMessage(), exception.getCause());
+        CompletableFuture.runAsync(() -> {
+            try (InputStream inputStream = file.getInputStream()) {
+                Path uploadDirectory = Files.createDirectories(Paths.get(EnvsConfig.getEnv("UPLOAD_DIR") + "/" + userId));
+                Path filePath = uploadDirectory.resolve(filename);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception exception) {
+                this.logger.error(exception.getMessage(), exception.getCause());
+                throw new BadRequestException("Couldn't save file: " + filename);
+            }
+        }).exceptionally(ex -> {
+            this.logger.error(ex.getMessage(), ex.getCause());
             throw new BadRequestException("Couldn't save file: " + filename);
-        }
+        });
+    }
+
+    public void deleteFile(UUID userId, String filename) {
+        this.logger.info("StorageService:deleteFileAsync");
+
+        CompletableFuture.runAsync(() -> {
+            Path filePath = Paths.get(EnvsConfig.getEnv("UPLOAD_DIR") + "/" + userId).resolve(filename);
+            File file = new File(filePath.toString());
+            if (file.exists()) {
+                file.delete();
+            }
+        }).exceptionally(ex -> {
+            this.logger.error(ex.getMessage(), ex.getCause());
+            throw new BadRequestException("Couldn't delete file: " + filename);
+        });
     }
 
     public InputStream loadAsResource(@NonNull String filename) {

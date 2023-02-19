@@ -4,6 +4,7 @@ import com.bookingapp.backend.exceptions.exceptions.BadRequestException;
 import com.bookingapp.backend.modules.database.entities.UserEntity;
 import com.bookingapp.backend.modules.place.dtos.CreatePlaceDTO;
 import com.bookingapp.backend.modules.place.dtos.PlaceDTO;
+import com.bookingapp.backend.modules.place.dtos.UpdatePlaceDTO;
 import org.apache.tika.Tika;
 import org.springframework.core.io.InputStreamResource;
 import jakarta.validation.Valid;
@@ -11,12 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,5 +62,11 @@ public class PlaceController {
     public ResponseEntity<List<PlaceDTO>> findPlacesByOwner() {
         UUID userId = ((UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
         return ResponseEntity.status(HttpStatus.OK).body(this.placeService.findPlacesByOwnerId(userId));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PlaceDTO> updatePlace(@PathVariable("id") UUID placeId, @ModelAttribute UpdatePlaceDTO body, @RequestParam("images") @Nullable List<MultipartFile> files) {
+        UUID userId = ((UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(this.placeService.updatePlace(userId, placeId, body, files));
     }
 }
