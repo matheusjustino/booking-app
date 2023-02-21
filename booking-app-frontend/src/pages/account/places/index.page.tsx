@@ -40,42 +40,35 @@ const PlacesPage: React.FC = () => {
 					<Link
 						href={`/account/places/edit/${place.id}`}
 						key={place.id}
-						className="flex gap-4 bg-gray-100 p-4 rounded-2xl my-2 hover:bg-gray-300 cursor-pointer"
+						className="flex flex-col sm:flex-row gap-4 bg-gray-100 p-4
+						rounded-2xl my-2 hover:bg-gray-300 cursor-pointer"
 					>
-						<div className={`w-32 h-32 overflow-hidden`}>
+						<div
+							className={`w-[inherit] h-[12rem] overflow-hidden`}
+						>
 							{place.photos.length > 0 ? (
-								<img
+								<Image
+									className={`rounded-2xl ${styles.imagePreview}`}
 									key={place.id + place.photos[0]}
-									className={`rounded-2xl aspect-square object-cover h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
+									objectFit="cover"
+									layout="fill"
 									src={`${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${place.photos[0]}`}
 									alt="Preview"
+									quality={60}
 								/>
 							) : (
-								// <Image
-								// 	className={`rounded-2xl ${styles.imagePreview}`}
-								// 	key={place.id + place.photos[0]}
-								// 	objectFit="cover"
-								// 	layout="fill"
-								// 	src={`${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${place.photos[0]}`}
-								// 	alt="Preview"
-								// />
-								<img
+								<Image
+									className={`rounded-2xl ${styles.imagePreview}`}
 									key={place.id + place.photos[0]}
-									className={`rounded-2xl object-cover h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
-									src={imageNotFound.src}
-									alt="Preview not found"
+									objectFit="cover"
+									layout="fill"
+									src={imageNotFound}
+									alt="Preview"
+									quality={60}
 								/>
-								// <Image
-								// 	className={`rounded-2xl ${styles.imagePreview}`}
-								// 	key={place.id + place.photos[0]}
-								// 	objectFit="cover"
-								// 	layout="fill"
-								// 	src={imageNotFound}
-								// 	alt="Preview"
-								// />
 							)}
 						</div>
-						<div className="grow-0 shrink">
+						<div>
 							<h2 className="text-xl capitalize">
 								{place.title}
 							</h2>

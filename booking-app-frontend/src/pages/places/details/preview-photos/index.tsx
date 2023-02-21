@@ -5,12 +5,12 @@ import { ImagePreview } from './components/image-preview';
 
 interface PreviewPhotosProps {
 	photos: string[];
-	openGalery: () => void;
+	openGallery: () => void;
 }
 
 const PreviewPhotos: React.FC<PreviewPhotosProps> = ({
 	photos,
-	openGalery,
+	openGallery,
 }) => {
 	return (
 		<div className="relative">
@@ -39,7 +39,7 @@ const PreviewPhotos: React.FC<PreviewPhotosProps> = ({
 					px-4 bg-white rounded-2xl shadow-md shadow-gray-500
 					hover:bg-gray-300 hover:-translate-y-[2px] transition-transform ease-in-out duration-200"
 				type="button"
-				onClick={openGalery}
+				onClick={openGallery}
 			>
 				<HiPhotograph size={24} />
 				Show more photos

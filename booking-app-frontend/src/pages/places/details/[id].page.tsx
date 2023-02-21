@@ -40,7 +40,7 @@ const PlaceDetailsPage: React.FC = () => {
 
 			<PreviewPhotos
 				photos={place.photos}
-				openGalery={() => setShowAllPhotos(true)}
+				openGallery={() => setShowAllPhotos(true)}
 			/>
 
 			{/** description and book div */}
