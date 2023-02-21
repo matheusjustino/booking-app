@@ -1,0 +1,8 @@
+.placeContainer {
+	transition: transform 0.2s ease-in-out;
+}
+
+.imagePreview {
+	object-fit: cover !important;
+	position: relative !important;
+}

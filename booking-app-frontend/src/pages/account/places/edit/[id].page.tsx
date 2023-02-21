@@ -4,16 +4,19 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { canSSRAuth } from '@/utils/can-ssr-auth';
 
 // HOOKS
-import { useNewPlace } from './useNewPlace';
+import { useEditPlace } from './useEditPlace';
+
+// STORE
+import { wrapper } from '@/store/store';
 
 // COMPONENTS
 import { AccountPageLayout } from '@/pages/account/components/account-page-layout';
 import { Perks } from '../components/perks';
 import { UploadImages } from '../components/upload-images';
 
-const AddNewPlacePage: React.FC = () => {
+const EditNewPlacePage: React.FC = () => {
 	const {
-		newPlaceForm,
+		editPlaceForm,
 		handleForm,
 		previewImages,
 		currentPhotoRef,
@@ -24,7 +27,7 @@ const AddNewPlacePage: React.FC = () => {
 		handleAddPhoto,
 		handleRemovePhoto,
 		handleSubmit,
-	} = useNewPlace();
+	} = useEditPlace();
 
 	return (
 		<div>
@@ -42,7 +45,7 @@ const AddNewPlacePage: React.FC = () => {
 						name="title"
 						id="title"
 						placeholder="title, example: My sweet home"
-						value={newPlaceForm.title}
+						value={editPlaceForm.title}
 						onChange={handleForm}
 					/>
 				</div>
@@ -59,7 +62,7 @@ const AddNewPlacePage: React.FC = () => {
 						name="address"
 						id="address"
 						placeholder="address"
-						value={newPlaceForm.address}
+						value={editPlaceForm.address}
 						onChange={handleForm}
 					/>
 				</div>
@@ -104,7 +107,7 @@ const AddNewPlacePage: React.FC = () => {
 					<textarea
 						name="description"
 						id="description"
-						value={newPlaceForm.description}
+						value={editPlaceForm.description}
 						onChange={handleForm}
 					/>
 				</div>
@@ -132,7 +135,7 @@ const AddNewPlacePage: React.FC = () => {
 					<textarea
 						name="extraInfo"
 						id="extraInfo"
-						value={newPlaceForm.extraInfo}
+						value={editPlaceForm.extraInfo}
 						onChange={handleForm}
 					/>
 				</div>
@@ -153,7 +156,7 @@ const AddNewPlacePage: React.FC = () => {
 								name="checkIn"
 								id="checkIn"
 								placeholder="14:00"
-								value={newPlaceForm.checkIn}
+								value={editPlaceForm.checkIn}
 								onChange={handleForm}
 							/>
 						</div>
@@ -164,7 +167,7 @@ const AddNewPlacePage: React.FC = () => {
 								name="checkOut"
 								id="checkOut"
 								placeholder="15:00"
-								value={newPlaceForm.checkOut}
+								value={editPlaceForm.checkOut}
 								onChange={handleForm}
 							/>
 						</div>
@@ -176,7 +179,7 @@ const AddNewPlacePage: React.FC = () => {
 								type="number"
 								name="maxGuests"
 								id="maxGuests"
-								value={newPlaceForm.maxGuests}
+								value={editPlaceForm.maxGuests}
 								onChange={handleForm}
 							/>
 						</div>
@@ -191,7 +194,7 @@ const AddNewPlacePage: React.FC = () => {
 						name="price"
 						id="price"
 						placeholder="Rent price"
-						value={newPlaceForm.price}
+						value={editPlaceForm.price}
 						onChange={handleForm}
 					/>
 				</div>
@@ -204,16 +207,19 @@ const AddNewPlacePage: React.FC = () => {
 	);
 };
 
+EditNewPlacePage.displayName = 'EditNewPlacePage';
+
 const WithLayout: React.FC = (props) => (
-	<AccountPageLayout>{<AddNewPlacePage {...props} />}</AccountPageLayout>
+	<AccountPageLayout>{<EditNewPlacePage {...props} />}</AccountPageLayout>
 );
 
 export default WithLayout;
 
-export const getServerSideProps: GetServerSideProps = canSSRAuth(
-	async (ctx: GetServerSidePropsContext) => {
-		return {
-			props: {},
-		};
-	},
-);
+export const getServerSideProps: GetServerSideProps =
+	wrapper.getServerSideProps((store) =>
+		canSSRAuth(async (ctx: GetServerSidePropsContext) => {
+			return {
+				props: {},
+			};
+		}),
+	);

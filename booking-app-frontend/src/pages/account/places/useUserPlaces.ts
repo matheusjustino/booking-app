@@ -1,0 +1,32 @@
+import { useLayoutEffect } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+
+// STORE
+import { useAppDispatch } from '@/store/store';
+import { selectUserPlaces, setUserPlaces } from '@/store/places/places.store';
+
+// INTERFACES
+import { PlaceInterface } from '@/interfaces/place.interface';
+
+const useUserPlaces = () => {
+	const places = useSelector(selectUserPlaces);
+	const dispatch = useAppDispatch();
+
+	useLayoutEffect(() => {
+		if (!places.length) {
+			(async () => {
+				const { data } = await axios.get<PlaceInterface[]>(
+					`/api/places/user`,
+				);
+				dispatch(setUserPlaces(data));
+			})();
+		}
+	}, [dispatch, places.length]);
+
+	return {
+		places,
+	};
+};
+
+export { useUserPlaces };

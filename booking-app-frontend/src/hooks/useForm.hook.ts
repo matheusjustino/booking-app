@@ -8,6 +8,10 @@ interface ResetForm {
 	(): void;
 }
 
+interface InitForm {
+	(state: Record<string, any>): void;
+}
+
 enum ACTION_TYPES {
 	HANDLE_FORM = 'HANDLE_FORM',
 	RESET_FORM = 'RESET_FORM',
@@ -36,7 +40,7 @@ function formReducer<T>(state: T, action: Action<T>) {
 	}
 }
 
-function useForm<T>(initialState: T): [T, HandleForm, ResetForm] {
+function useForm<T>(initialState: T): [T, HandleForm, ResetForm, InitForm] {
 	const [form, dispatch] = useReducer(formReducer, initialState);
 
 	const handleForm: HandleForm = (event) => {
@@ -58,7 +62,18 @@ function useForm<T>(initialState: T): [T, HandleForm, ResetForm] {
 		});
 	};
 
-	return [form as T, handleForm, resetForm];
+	const initForm = (state: Record<string, any>) => {
+		Object.entries(state).forEach(([key, value]) =>
+			dispatch({
+				type: ACTION_TYPES.HANDLE_FORM,
+				name: key,
+				value,
+				initialState,
+			}),
+		);
+	};
+
+	return [form as T, handleForm, resetForm, initForm];
 }
 
 export { useForm };

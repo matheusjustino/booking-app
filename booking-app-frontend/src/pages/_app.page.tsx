@@ -2,6 +2,10 @@ import '@/styles/global.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
+import { Provider } from 'react-redux';
+
+// STORE
+import { wrapper } from 'store/store';
 
 // CONTEXTS
 import { ToastProvider } from '@/contexts/toast.context';
@@ -10,8 +14,12 @@ import { AuthProvider } from '@/contexts/auth.context';
 // COMPONENT
 import { Layout } from '@/components/layout';
 
-export default function App({ Component, pageProps }: AppProps) {
+const App = ({ Component, ...rest }: AppProps) => {
 	const [isSSR, setIsSSR] = useState(true);
+	const {
+		store,
+		props: { pageProps },
+	} = wrapper.useWrappedStore(rest);
 
 	useEffect(() => {
 		setIsSSR(false);
@@ -21,11 +29,15 @@ export default function App({ Component, pageProps }: AppProps) {
 
 	return (
 		<ToastProvider>
-			<AuthProvider>
-				<Layout>
-					<Component {...pageProps} />
-				</Layout>
-			</AuthProvider>
+			<Provider store={store}>
+				<AuthProvider>
+					<Layout>
+						<Component {...pageProps} />
+					</Layout>
+				</AuthProvider>
+			</Provider>
 		</ToastProvider>
 	);
-}
+};
+
+export default wrapper.withRedux(App);

@@ -14,6 +14,8 @@ import { useAuth } from '@/contexts/auth.context';
 
 // INTERFACES
 import { DoLoginInterface } from '@/interfaces/do-login.interface';
+
+// COMPONENTS
 import { Loader } from '@/components/loader/loader';
 
 export default function Home() {

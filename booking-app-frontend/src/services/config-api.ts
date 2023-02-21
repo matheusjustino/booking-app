@@ -1,10 +1,11 @@
 import axios, { AxiosError } from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import { parseCookies } from 'nookies';
 
 import { AuthTokenError } from './errors/auth-token.error';
 import { logout } from 'contexts/auth.context';
 
-export const setupAPIClient = (context = undefined) => {
+export const setupAPIClient = (context?: GetServerSidePropsContext) => {
 	const cookies = parseCookies(context);
 
 	const api = axios.create({
@@ -14,6 +15,7 @@ export const setupAPIClient = (context = undefined) => {
 				? `Bearer ${cookies['@auth.token']}`
 				: '',
 		},
+		withCredentials: true,
 	});
 
 	api.interceptors.response.use(

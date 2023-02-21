@@ -1,0 +1,21 @@
+.imagePreview {
+	position: relative !important;
+	max-width: 90px;
+	max-height: 112px;
+}
+
+.imagePreviewContainer {
+	&:hover {
+		.trashIcon {
+			z-index: 11;
+			display: flex;
+			position: absolute;
+			max-width: 90px;
+			max-height: 112px;
+			width: 100%;
+			height: 100%;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+}
