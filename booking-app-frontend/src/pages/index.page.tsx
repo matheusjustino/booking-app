@@ -24,13 +24,16 @@ const HomePage: React.FC = () => {
 					>
 						<div className="rounded-2xl h-[180px] mb-2">
 							{place.photos[0] && (
-								<Image
-									className={`rounded-2xl aspect-square ${styles.imagePreview}`}
+								// <Image
+								// 	className={`rounded-2xl aspect-square ${styles.imagePreview}`}
+								// 	src={`${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${place.photos[0]}`}
+								// 	layout="fill"
+								// 	alt="Preview"
+								// />
+								<img
+									className={`rounded-2xl aspect-square h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
 									src={`${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${place.photos[0]}`}
-									layout="fill"
 									alt="Preview"
-									// width={200}
-									// height={250}
 								/>
 							)}
 						</div>
