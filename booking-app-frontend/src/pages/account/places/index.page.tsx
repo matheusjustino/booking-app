@@ -62,7 +62,7 @@ const PlacesPage: React.FC = () => {
 								<img
 									key={place.id + place.photos[0]}
 									className={`rounded-2xl object-cover h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
-									src={imageNotFound}
+									src={imageNotFound.src}
 									alt="Preview not found"
 								/>
 								// <Image
