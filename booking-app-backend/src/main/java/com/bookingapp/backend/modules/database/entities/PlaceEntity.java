@@ -42,13 +42,13 @@ public class PlaceEntity implements Serializable {
     @Column
     private List<String> photos;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 450)
     private String description;
 
     @Column()
     private List<String> perks;
 
-    @Column()
+    @Column(length = 450)
     private String extraInfo;
 
     @Column()
