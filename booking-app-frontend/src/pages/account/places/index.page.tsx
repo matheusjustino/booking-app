@@ -44,23 +44,35 @@ const PlacesPage: React.FC = () => {
 					>
 						<div className={`w-32 h-32 overflow-hidden`}>
 							{place.photos.length > 0 ? (
-								<Image
-									className={`rounded-2xl ${styles.imagePreview}`}
+								<img
 									key={place.id + place.photos[0]}
-									objectFit="cover"
-									layout="fill"
+									className={`rounded-2xl aspect-square object-cover h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
 									src={`${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${place.photos[0]}`}
 									alt="Preview"
 								/>
 							) : (
-								<Image
-									className={`rounded-2xl ${styles.imagePreview}`}
+								// <Image
+								// 	className={`rounded-2xl ${styles.imagePreview}`}
+								// 	key={place.id + place.photos[0]}
+								// 	objectFit="cover"
+								// 	layout="fill"
+								// 	src={`${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${place.photos[0]}`}
+								// 	alt="Preview"
+								// />
+								<img
 									key={place.id + place.photos[0]}
-									objectFit="cover"
-									layout="fill"
+									className={`rounded-2xl object-cover h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
 									src={imageNotFound}
-									alt="Preview"
+									alt="Preview not found"
 								/>
+								// <Image
+								// 	className={`rounded-2xl ${styles.imagePreview}`}
+								// 	key={place.id + place.photos[0]}
+								// 	objectFit="cover"
+								// 	layout="fill"
+								// 	src={imageNotFound}
+								// 	alt="Preview"
+								// />
 							)}
 						</div>
 						<div className="grow-0 shrink">

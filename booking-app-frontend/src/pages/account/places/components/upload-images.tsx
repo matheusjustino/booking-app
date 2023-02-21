@@ -53,7 +53,16 @@ const UploadImages: React.FC<UploadImagesProps> = ({
 						>
 							<BiTrash size={32} color="red" />
 						</div>
-						<Image
+						<img
+							className={`rounded-2xl object-contain h-full w-full inset-0 bg-transparent ${styles.imagePreview}`}
+							src={
+								checkIfIsBase64(photo)
+									? photo
+									: `${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${photo}`
+							}
+							alt="Preview"
+						/>
+						{/* <Image
 							className={`rounded-2xl ${styles.imagePreview}`}
 							objectFit="contain"
 							layout="fill"
@@ -63,7 +72,7 @@ const UploadImages: React.FC<UploadImagesProps> = ({
 									: `${process.env.NEXT_PUBLIC_BASE_URL}/places/images/${photo}`
 							}
 							alt="Preview"
-						/>
+						/> */}
 					</div>
 				))}
 		</div>

@@ -7,7 +7,11 @@ import { canSSRAuth } from '@/utils/can-ssr-auth';
 import { AccountPageLayout } from '../components/account-page-layout';
 
 const BookingsPage: React.FC = () => {
-	return <div>bookings</div>;
+	return (
+		<div className="flex items-center justify-center w-full mt-20">
+			<h1 className="text-3xl">In progress...</h1>
+		</div>
+	);
 };
 
 const WithLayout: React.FC = (props) => (
